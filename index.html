@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>💖 Something Special For You</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta property="og:title" content="💖 Something Special For You">
+<meta property="og:description" content="Tap to see what my heart wants to say 🌹💑">
+<meta property="og:type" content="website">
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ff4f9a,#ff9acb);
+    overflow:hidden;
+    font-family:'Segoe UI',sans-serif;
+}
+
+/* Intro */
+#intro{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(135deg,#ff4f9a,#ff9acb);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    z-index:100;
+    text-align:center;
+}
+#intro button{
+    margin-top:20px;
+    padding:12px 30px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#ff4081;
+    font-size:16px;
+    cursor:pointer;
+}
+
+/* Falling Roses / Flowers / Couples */
+.fall{
+    position:fixed;
+    top:-10vh;
+    pointer-events:none;
+    animation:fall linear infinite;
+    opacity:0.95;
+}
+
+@keyframes fall{
+    0%{
+        transform:translateY(-10vh) translateX(0) rotate(0deg);
+    }
+    50%{
+        transform:translateY(50vh) translateX(30px) rotate(180deg);
+    }
+    100%{
+        transform:translateY(110vh) translateX(-30px) rotate(360deg);
+    }
+}
+
+/* Card */
+.card{
+    width:280px;
+    height:420px;
+    perspective:1000px;
+    display:none;
+    z-index:10;
+}
+.inner{
+    width:100%;
+    height:100%;
+    position:relative;
+    transition:transform 1s;
+    transform-style:preserve-3d;
+}
+.card.flip .inner{
+    transform:rotateY(180deg);
+}
+.side{
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-radius:25px;
+    backface-visibility:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    box-shadow:0 0 30px rgba(255,0,120,.5);
+}
+.front{
+    background:white;
+    color:#ff4081;
+}
+.back{
+    background:#ffe066;
+    transform:rotateY(180deg);
+    color:#d10068;
+}
+
+#greet{
+    font-size:18px;
+    font-weight:600;
+}
+#frontTyping{
+    font-size:14px;
+    min-height:40px;
+    margin-top:6px;
+}
+
+button{
+    margin:8px;
+    padding:10px 22px;
+    border:none;
+    border-radius:20px;
+    font-size:14px;
+    cursor:pointer;
+}
+.yes{background:#ff4081;color:white;}
+.no{background:#ccc;}
+
+.big-heart{
+    font-size:70px;
+    animation:pulse 1s infinite;
+}
+@keyframes pulse{
+    50%{transform:scale(1.15);}
+}
+
+#typing{
+    font-size:14px;
+    min-height:60px;
+}
+#forever{
+    margin-top:10px;
+    display:none;
+}
+
+/* Fireworks */
+.firework{
+    position:fixed;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+  <source src="https://assets.mixkit.co/music/preview/mixkit-love-story-698.mp3">
+</audio>
+
+<div id="intro">
+    <h2>🌹💑 Tap to open my heart 💑🌹</h2>
+    <button onclick="startLove()">Play with Love ❤️</button>
+</div>
+
+<div class="card" id="card">
+  <div class="inner">
+
+    <div class="side front">
+        <div id="greet"></div>
+        <div id="frontTyping"></div>
+        <p>Will you marry me?</p>
+        <button class="yes" onclick="accept()">YES 💖</button>
+        <button class="no">NO 🥺</button>
+    </div>
+
+    <div class="side back">
+        <div class="big-heart">❤️</div>
+        <h3>Love you patniiiiiiiiiiiiiiiii jiiiiiiiiii 😘😘😘😘😘😘😘</h3>
+        <div id="typing"></div>
+        <div id="forever">😍Meri jindagi ka aap sabse bada gift ho bachha 🥰🥰🥰</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Name
+const params=new URLSearchParams(location.search);
+const name=params.get("name")||"Special One";
+
+// 🌹🌸💑 LOTS of falling emojis
+const items = ["🌹","🌸","🌺","🌷","💐","💑","👩‍❤️‍👨","👩‍❤️‍💋‍👨"];
+
+for(let i=0;i<80;i++){   // 🔥 MORE quantity
+    let el=document.createElement("div");
+    el.className="fall";
+    el.innerText=items[Math.floor(Math.random()*items.length)];
+    el.style.left=Math.random()*100+"vw";
+    el.style.fontSize=18+Math.random()*22+"px";
+    el.style.animationDuration=6+Math.random()*6+"s";
+    el.style.animationDelay=Math.random()*5+"s";
+    document.body.appendChild(el);
+}
+
+// Start
+function startLove(){
+    intro.style.display="none";
+    card.style.display="block";
+    music.play();
+    if(navigator.vibrate) navigator.vibrate(200);
+    greet.innerHTML="💘 Happy Propose Day "+name+" 💘";
+    typeFront();
+}
+
+// Front typing
+function typeFront(){
+    const text="Kya aap mere bachho ki mummy banna pasand karengi 🤭🙈🙈";
+    let i=0;
+    const t=setInterval(()=>{
+        frontTyping.innerHTML+=text.charAt(i++);
+        if(i>=text.length) clearInterval(t);
+    },60);
+}
+
+// Fireworks
+function firework(x,y){
+    for(let i=0;i<30;i++){
+        let f=document.createElement("div");
+        f.className="firework";
+        f.style.left=x+"px";
+        f.style.top=y+"px";
+        f.style.background=`hsl(${Math.random()*360},100%,60%)`;
+        document.body.appendChild(f);
+
+        const a=Math.random()*2*Math.PI;
+        const d=Math.random()*140;
+
+        f.animate([
+            {transform:"translate(0,0)",opacity:1},
+            {transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`,opacity:0}
+        ],{duration:1000});
+
+        setTimeout(()=>f.remove(),1000);
+    }
+}
+
+// Accept
+function accept(){
+    firework(innerWidth/2,innerHeight/2);
+    let fw=setInterval(()=>{
+        firework(Math.random()*innerWidth,Math.random()*innerHeight);
+    },500);
+    setTimeout(()=>clearInterval(fw),3000);
+
+    card.classList.add("flip");
+    if(navigator.vibrate) navigator.vibrate([100,80,100]);
+    setTimeout(typeBack,1200);
+}
+
+// Back typing
+function typeBack(){
+    const text="Thank you meri zindagi me aane ke liye bachha 🥰🌹💑 LOVE YOU BACHHA ....♾️";
+    let i=0;
+    const t=setInterval(()=>{
+        typing.innerHTML+=text.charAt(i++);
+        if(i>=text.length){
+            clearInterval(t);
+            forever.style.display="block";
+        }
+    },60);
+}
+</script>
+
+</body>
+</html>
